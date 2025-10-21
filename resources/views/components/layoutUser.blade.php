@@ -35,7 +35,7 @@
                             <div class="row align-items-center justify-content-lg-between">
                                 <div class="col-xl-2  col-lg-2 col-md-3 col-sm-6 col-7 pr-0 d-flex align-items-center">
                                     <div class="logo">
-                                        <a href="index.html" class="d-block" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="kingstock">
+                                        <a href="{{ url('/') }}" class="d-block" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="kingstock">
                                             <img src="{{ asset('landing/images/logo/logo.png') }}" alt="kingstock">
                                         </a>
                                     </div>
@@ -53,11 +53,21 @@
                                                 <li class="has-dropdown {{ request()->is('categories', 'category/*') ? 'active' : '' }}">
                                                     <a href="{{ url('/categories') }}">Kategori <i class="far fa-angle-down"></i></a>
                                                     <ul class="submenu">
-                                                        <li><a href="{{ url('/category/furniture') }}">Furniture</a></li>
-                                                        <li><a href="{{ url('/category/dekorasi') }}">Dekorasi Rumah</a></li>
-                                                        <li><a href="{{ url('/category/elektronik') }}">Elektronik</a></li>
-                                                        <li><a href="{{ url('/category/fashion') }}">Fashion</a></li>
-                                                        <li><a href="{{ url('/category/otomotif') }}">Otomotif</a></li>
+                                                        @php
+                                                            $kategoris = \App\Models\Kategori::where('status', 'Aktif')->get();
+                                                        @endphp
+                                                        @forelse($kategoris as $kategori)
+                                                        <li>
+                                                            <a href="{{ route('category', $kategori->id) }}">
+                                                                {{ $kategori->nama_kategori }}
+                                                                <span class="badge bg-secondary float-right mt-1">
+                                                                    {{ $kategori->produks_count ?? $kategori->produks->count() }}
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        @empty
+                                                        <li><a href="#">Belum ada kategori</a></li>
+                                                        @endforelse
                                                     </ul>
                                                 </li>
                                                 <li class="{{ request()->is('promo') ? 'active' : '' }}">
@@ -74,69 +84,108 @@
                                     </div><!-- /main-menu -->
                                 </div><!-- /col -->
                                 <div class="col-xl-4 col-lg-3 col-md-8 col-sm-5 col-4">
-                                        <div class="header-right d-flex justify-content-end align-items-center">
-                                            <div class="header-search position-relative d-none d-xl-block" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="Search">
-                                                <input type="text" placeholder="Search" class="border-0 pl-25 theme-color">
-                                                <span class="position-absolute black-color"><span><i class="far fa-search"></i></span></span>
-                                            </div>
-                                            <ul>
-                                                <li class="h-shop position-relative ml-30">
-                                                    <div class="header-shopping-cart position-relative">
-                                                        <span class="dark-black-color" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="Add to cart"><span><i class="far fa-shopping-cart"></i></span></span>
-                                                        <span class="s-count position-absolute theme-bg white text-center">2</span>
-                                                    </div>
-                                                    <div class="header-shopping-cart-details position-absolute bg-white border-gray pl-30 pr-30 pt-35 pb-60">
-                                                    <div class="h-shop-cart-contetn over-x-hidden over-y-scroll">
-                                                        <ul class="d-flex pb-10 border-b-light-gray">
-                                                            <li class="h-shop-cart-img pl-0">
-                                                                <a class="d-block" href="product-details.html"><img src="images/product/product10.jpg" alt=""></a>
-                                                            </li>
-                                                            <li class="pl-3">
-                                                            <h6 class="single-product-name pb-1">
-                                                                <a href="product-details.html">Blossom Porcelain Side Plates</a></h6>
-                                                            <span class="primary-color">1<span>x</span>$320.00</span>
-                                                            </li>
-                                                            <li class="s-p-remove px-1 pl-0">
-                                                                <span>x</span>
-                                                            </li>
-                                                        </ul>
-                                                        <ul class="d-flex pt-20 pb-15 border-b-light-gray">
-                                                            <li class="h-shop-cart-img pl-0">
-                                                                <a class="d-block" href="product-details.html"><img src="images/product/product2.jpg" alt=""></a>
-                                                            </li>
-                                                            <li class="pl-3">
-                                                                <h6 class="single-product-name pb-1"><a href="product-details.html">Chair living room fiberglass</a></h6>
-                                                                <span class="primary-color">1<span>x</span>$120.00</span>
-                                                            </li>
-                                                            <li class="s-p-remove px-1 pl-0">
-                                                                <span>x</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="s-sub-t mt-2 mb-15">
-                                                        <span class="primary-color">Subtotal:</span>
-                                                        <span class="primary-color float-right"> $440.00</span>
-                                                    </div>
-                                                    <div class="d-sm-flex justify-content-between">
-                                                        <a href="cart.html" class="web-btn d-inline-block text-uppercase primary-color gray-border2 position-relative over-hidden pl-20 pr-20 pt-10 pb-10 mt-10">view cart<span class="pl-1"><i class="fas fa-long-arrow-alt-right"></i></span></a>
-                                                        <a href="checkout.html" class="web-btn d-inline-block text-uppercase theme-bg border-theme02 position-relative over-hidden pl-20 pr-20 pt-10 pb-10 mt-10 white">checkout<span class="pl-1"><i class="fas fa-long-arrow-alt-right"></i></span></a>
-                                                    </div>
-                                                    </div><!-- /header-shopping-cart -->
-                                                </li>
-                                            </ul>
-                                            <ul class="header-wishlist pl-2 d-none d-md-block">
-                                                <li class="position-relative">
-                                                    <a href="wishlist.html" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="View wishlist" class="dark-black-color"><span><i class="far fa-heart"></i></span>
+                                    <div class="header-right d-flex justify-content-end align-items-center">
+                                        <div class="header-search position-relative d-none d-xl-block" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="Search">
+                                            <form action="{{ route('shop') }}" method="GET" class="d-flex">
+                                                <input type="text" name="search" placeholder="Search" class="border-0 pl-25 theme-color" value="{{ request('search') }}">
+                                                <button type="submit" class="position-absolute black-color border-0 bg-transparent">
+                                                    <span><i class="far fa-search"></i></span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <ul>
+                                            <li class="h-shop position-relative ml-30">
+                                                <div class="header-shopping-cart position-relative">
+                                                    <a href="{{ auth()->check() ? route('cart.index') : route('login') }}" class="dark-black-color">
+                                                        <span><i class="far fa-shopping-cart"></i></span>
                                                     </a>
-                                                </li>
-                                            </ul>
-                                            <ul class="header-account d-none d-md-block">
-                                                <li class="d-none d-md-inline-block pl-20">
-                                                    <a href="login.html" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="My Account" class="dark-black-color"><span><i class="far fa-user-circle"></i></span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div><!-- /header-right -->
+                                                    @auth
+                                                        @php
+                                                            $cartCount = \App\Models\Cart::where('user_id', auth()->id())->sum('quantity');
+                                                        @endphp
+                                                        @if($cartCount > 0)
+                                                            <span class="s-count position-absolute theme-bg white text-center">{{ $cartCount }}</span>
+                                                        @endif
+                                                    @endauth
+                                                </div>
+
+                                                <!-- Cart Dropdown Content -->
+                                                <div class="header-shopping-cart-details position-absolute bg-white border-gray pl-30 pr-30 pt-35 pb-60">
+                                                    @auth
+                                                        @php
+                                                            $cartItems = \App\Models\Cart::with('produk')->where('user_id', auth()->id())->latest()->take(2)->get();
+                                                            $cartTotal = 0;
+                                                        @endphp
+
+                                                        <div class="h-shop-cart-contetn over-x-hidden over-y-scroll">
+                                                            @forelse($cartItems as $item)
+                                                            @php
+                                                                $subtotal = $item->harga * $item->quantity;
+                                                                $cartTotal += $subtotal;
+                                                            @endphp
+                                                            <ul class="d-flex pb-10 border-b-light-gray">
+                                                                <li class="h-shop-cart-img pl-0">
+                                                                    @if($item->produk->gambar)
+                                                                        <img src="{{ asset('storage/'.$item->produk->gambar) }}" alt="{{ $item->produk->nama_produk }}" width="60" height="60" style="object-fit: cover;">
+                                                                    @else
+                                                                        <div class="bg-light d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                                                            <i class="fas fa-image text-muted"></i>
+                                                                        </div>
+                                                                    @endif
+                                                                </li>
+                                                                <li class="pl-3">
+                                                                    <h6 class="single-product-name pb-1">
+                                                                        <a href="{{ route('product.detail', $item->produk->id) }}">{{ \Illuminate\Support\Str::limit($item->produk->nama_produk, 20) }}</a>
+                                                                    </h6>
+                                                                    <span class="primary-color">{{ $item->quantity }}<span>x</span>Rp {{ number_format($item->harga, 0, ',', '.') }}</span>
+                                                                </li>
+                                                                <li class="s-p-remove px-1 pl-0">
+                                                                    <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="border-0 bg-transparent text-danger">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                            </ul>
+                                                            @empty
+                                                            <p class="text-center py-4">Keranjang belanja kosong</p>
+                                                            @endforelse
+                                                        </div>
+
+                                                        @if($cartItems->count() > 0)
+                                                        <div class="s-sub-t mt-2 mb-15">
+                                                            <span class="primary-color">Subtotal:</span>
+                                                            <span class="primary-color float-right">Rp {{ number_format($cartTotal, 0, ',', '.') }}</span>
+                                                        </div>
+                                                        <div class="d-sm-flex justify-content-between">
+                                                            <a href="{{ route('cart.index') }}" class="web-btn d-inline-block text-uppercase primary-color gray-border2 position-relative over-hidden pl-20 pr-20 pt-10 pb-10 mt-10">Lihat Keranjang</a>
+                                                            <a href="{{ route('checkout') }}" class="web-btn d-inline-block text-uppercase theme-bg border-theme02 position-relative over-hidden pl-20 pr-20 pt-10 pb-10 mt-10 white">Checkout</a>
+                                                        </div>
+                                                        @endif
+                                                    @else
+                                                        <div class="text-center py-4">
+                                                            <p>Silakan login untuk melihat keranjang</p>
+                                                            <a href="{{ route('login') }}" class="web-btn btn-sm theme-bg">Login</a>
+                                                        </div>
+                                                    @endauth
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul class="header-wishlist pl-2 d-none d-md-block">
+                                            <li class="position-relative">
+                                                <a href="#" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="View wishlist" class="dark-black-color"><span><i class="far fa-heart"></i></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="header-account d-none d-md-block">
+                                            <li class="d-none d-md-inline-block pl-20">
+                                                <a href="{{ route('login') }}" data-toggle="tooltip" data-selector="true" data-placement="bottom" title="My Account" class="dark-black-color"><span><i class="far fa-user-circle"></i></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div><!-- /header-right -->
                                 </div><!-- /col -->
                             </div><!-- /row -->
                         </div>

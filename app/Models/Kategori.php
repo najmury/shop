@@ -9,7 +9,7 @@ class Kategori extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kode_kategori', 'nama_kategori'];
+    protected $fillable = ['kode_kategori', 'nama_kategori', 'status'];
 
     protected static function boot()
     {
@@ -27,5 +27,9 @@ class Kategori extends Model
     public function produks()
     {
         return $this->hasMany(Produk::class);
+    }
+    public function getProduksCountAttribute()
+    {
+        return $this->produks()->where('status', 'Aktif')->count();
     }
 }
