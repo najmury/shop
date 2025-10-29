@@ -59,7 +59,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     })->name('dashboard');
 
     Route::get('/user', [UserController::class, 'index'])->name('user');
-    Route::post('/user/create', [UserController::class, 'store'])->name('user.store');
+    // Route::post('/user/create', [UserController::class, 'store'])->name('user.store');
 
     // Kategori
     Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');

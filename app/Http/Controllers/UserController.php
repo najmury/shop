@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $dataUser = User::get();
-        return view('user',compact('dataUser'));
+        return view('user', compact('dataUser'));
     }
 
     public function store(Request $request)
@@ -31,21 +32,35 @@ class UserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('login')->with('success', 'Registration successful!');
+        return redirect()->route('home')->with('success', 'Registration successful!');
     }
 
     public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
+        // Coba login
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
-            // Redirect ke halaman sebelumnya atau home
-            return redirect()->intended('/');
+            // Ambil data user yang sedang login
+            $user = Auth::user();
+
+            // Arahkan berdasarkan role
+            if ($user->role === 'admin') {
+                return redirect()->route('dashboard');
+            } elseif ($user->role === 'user') {
+                return redirect()->route('home');
+            } else {
+                // Jika role tidak dikenali
+                Auth::logout();
+                return redirect('/login')->withErrors([
+                    'role' => 'Akun anda tidak memiliki hak akses yang valid.',
+                ]);
+            }
         }
 
         return back()->withErrors([
@@ -68,6 +83,7 @@ class UserController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        
+        return redirect()->route('home')->with('success', 'Berhasil logout.');
     }
 }
