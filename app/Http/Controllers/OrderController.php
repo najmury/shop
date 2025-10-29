@@ -112,7 +112,7 @@ class OrderController extends Controller
     public function adminIndex()
     {
         $orders = Order::with('user', 'items')->latest()->get();
-        return view('admin.orders.index', compact('orders'));
+        return view('pesanan', compact('orders'));
     }
 
     public function updateStatus(Request $request, $id)
